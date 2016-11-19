@@ -50,6 +50,11 @@ CF_Cluster::CF_Cluster(CF_Node *node) :
     updateMetrics();
 }
 
+bool CF_Cluster::operator ==(const CF_Cluster &rhs) const
+{
+    return (N == rhs.N) && std::equal(std::begin(LS), std::end(LS), std::begin(rhs.LS)) && (SS == rhs.SS);
+}
+
 void CF_Cluster::add(const CF_Cluster &entry)
 {
     N += entry.N;
@@ -71,7 +76,7 @@ void CF_Cluster::remove(const CF_Cluster &entry)
 void CF_Cluster::updateMetrics()
 {
     X0 = LS / (data_t)N;
-    R = sqrt((SS - 2 * dot(X0, LS) + N * dot(X0, X0)) / N);
+    R = (N > 1) ? sqrt((SS - 2 * dot(X0, LS) + N * dot(X0, X0)) / N) : 0; //check to avoid fails due to precision issues
     D = (N > 1) ? sqrt(2 * (N * SS - dot(LS, LS)) / (N * (N - 1))) : 0;
     if (isnan(R) || isinf(R) || isnan(D) || isinf(D))
         int a = 1;

@@ -27,6 +27,8 @@ public:
     CF_Cluster(const CF_Vector& entries);
     CF_Cluster(CF_Node *node);
 
+    bool operator ==(const CF_Cluster &rhs) const;
+
     void add(const CF_Cluster& entry);
     void remove(const CF_Cluster& entry);
 
