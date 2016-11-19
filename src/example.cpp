@@ -129,10 +129,10 @@ void example_init(char *filename)
     std::cout << "Total number of points in leaf entries: " << n << std::endl;
 
     auto leafNodes = getAllLeafNodes(tree);
-    std::vector<DataPoint> centroids;
+    CF_Vector centroids;
     size_t k = sqrt(subclusters.size());
     for (size_t i = 0; i < k; ++i)
-        centroids.push_back(DataPoint{(double)rand() / RAND_MAX * treeCluster.R,  (double)rand() / RAND_MAX * treeCluster.R} + treeCluster.X0);
+        centroids.emplace_back(DataPoint{(double)rand() / RAND_MAX * treeCluster.R,  (double)rand() / RAND_MAX * treeCluster.R} + treeCluster.X0);
 //    size_t k = leafNodes.size();
 //    for (size_t i = 0; i < k; ++i)
 //    {
@@ -150,28 +150,20 @@ void example_init(char *filename)
             newClusters[j].clear();
         for (size_t i = 0; i < subclusters.size(); ++i)
         {
-            size_t closest = 0;
-            data_t shortestDist = getDistance(subclusters[i], CF_Cluster(centroids[0]));
-            for (size_t j = 1; j < centroids.size(); ++j)
-            {
-                data_t dist = getDistance(subclusters[i], CF_Cluster(centroids[j]));
-                if (dist < shortestDist)
-                {
-                    shortestDist = dist;
-                    closest = j;
-                }
-            }
-            newClusters[closest].push_back(subclusters[i]);
-            std::cout << "Adding " << i << " entry to " << closest << " cluster" << std::endl;
+            auto closest = subclusters[i].findClosest(centroids);
+            size_t ind = closest - centroids.begin();
+
+            newClusters[ind].push_back(subclusters[i]);
+
+            data_t dist = getDistance(subclusters[i], *closest);
+            newMSE += dist*dist;
+
+//            std::cout << "Adding " << i << " entry to " << ind << " cluster" << std::endl;
         }
         for (size_t j = 0; j < centroids.size(); ++j)
         {
-            centroids[j] = CF_Cluster(newClusters[j]).X0;
-            for (size_t i = 0; i < newClusters[j].size(); ++i)
-            {
-                data_t dist = getDistance(newClusters[j][i], CF_Cluster(centroids[j]));
-                newMSE += dist * dist;
-            }
+            if (!newClusters[j].empty())
+                centroids[j] = CF_Cluster(newClusters[j]).X0;
         }
         std::cout << "New MSE: " << newMSE << std::endl;
     }

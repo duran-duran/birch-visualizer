@@ -78,8 +78,6 @@ void CF_Cluster::updateMetrics()
     X0 = LS / (data_t)N;
     R = (N > 1) ? sqrt((SS - 2 * dot(X0, LS) + N * dot(X0, X0)) / N) : 0; //check to avoid fails due to precision issues
     D = (N > 1) ? sqrt(2 * (N * SS - dot(LS, LS)) / (N * (N - 1))) : 0;
-    if (isnan(R) || isinf(R) || isnan(D) || isinf(D))
-        int a = 1;
 }
 
 CF_Vector_it CF_Cluster::findClosest(CF_Vector &clusters) const
