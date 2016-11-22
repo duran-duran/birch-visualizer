@@ -37,7 +37,7 @@ void example_init(char *filename)
         points.push_back(point);
     }
 
-    CF_TreeBuilder builder(count, dim, 13, 0, sqrt(count), std::log(count));
+    CF_TreeBuilder builder(count, dim, std::log(count), 0, sqrt(count), std::log(count));
     for (auto& point : points)
         builder.addPointToTree(point);
 
