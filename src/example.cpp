@@ -174,25 +174,6 @@ void example_init(char *filename)
 //    delete tree;
 
     std::vector<Color> colors;
-//    std::vector<Color> colors =
-//    {
-//        Color::Blue,
-//        Color::Black,
-//        Color::Green,
-//        Color::Yellow,
-//        Color::Orange,
-//        Color::Violet,
-//        Color::Brown,
-//        Color::Aquamarine,
-//        Color::Pink,
-//        Color::Gray,
-//        Color::LightBlue,
-//        Color::Khaki,
-//        Color::Salmon,
-//        Color::Gold,
-//        Color::Azure,
-//        Color::Crimson
-//    };
     for (int i = 0; i < 8; ++i)
         for (int j = 0; j < 8; ++j)
             for (int k = 0; k < 8; ++k)

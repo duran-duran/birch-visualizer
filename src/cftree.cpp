@@ -90,10 +90,10 @@ CF_Vector CF_Node::splitNode()
 
     for (auto it = subclusters.begin(); it != subclusters.end(); ++it)
     {
-            if (getDistance(*it, *pole1) < getDistance(*it, *pole2))
-                subclusters1.push_back(*it);
-            else
-                subclusters2.push_back(*it);
+        if (getDistance(*it, *pole1) < getDistance(*it, *pole2))
+            subclusters1.push_back(*it);
+        else
+            subclusters2.push_back(*it);
     }
 
     CF_Node *node1 = new CF_Node(threshold, bFactor, counter, leaf, subclusters1),
@@ -232,4 +232,3 @@ CF_Node *CF_Node::getNextLeaf()
 {
     return nextLeaf;
 }
-
