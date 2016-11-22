@@ -1,9 +1,6 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-#include <stdio.h>
-#include <cstdlib>
-#include <iostream>
 #include <vector>
 #include <valarray>
 

@@ -4,7 +4,9 @@
 #include "common.h"
 #include "cftree.h"
 #include "metrics.h"
-#include "threshold_calculator.h"
+#include "cftreebuilder.h"
+#include <iostream>
+
 using namespace oxygine;
 
 Resources res;
@@ -35,54 +37,20 @@ void example_init(char *filename)
         points.push_back(point);
     }
 
-    CF_Node *tree;
-    CF_Vector subclusters;
-    int maxEntries = sqrt(count);
-    std::cout << "Max entries in tree: " << maxEntries << std::endl;
+    CF_TreeBuilder builder(count, dim, 13, 0, sqrt(count), std::log(count));
+    for (auto& point : points)
+        builder.addPointToTree(point);
 
-    size_t entries = 0;
-    double t = /*1*/0;
-    size_t branching = 13;
-    std::cout << "Start building with threshold " << t << std::endl;
-    tree = new CF_Node(t, branching, &entries);
-    auto treeCluster = CF_Cluster(tree);
-
-    ThresholdCalculator tCalc;
-    tCalc.setNmax(count);
-    size_t trackEach = std::log(count);
-
-    for (size_t i = 0; i < points.size(); ++i)
-    {
-        tree->insert(CF_Cluster(points[i]));
-        treeCluster.add(CF_Cluster(points[i]));
-        if (i % trackEach == 0 && i != 0)
-            tCalc.track(tree, treeCluster);
-        if (entries > maxEntries)
-        {
-            t = tCalc.getNewThreshold(tree, dim);
-            subclusters = getAllLeafEntries(tree);
-            tree->clear();
-            delete tree;
-//            t *= 1.1;
-            std::cout << "Need rebuilding, new threshold is " << t << std::endl;
-            entries = 0;
-            tree = new CF_Node(t, branching, &entries);
-            for (size_t j = 0; j < subclusters.size(); ++j)
-                tree->insert(subclusters[j]);
-            treeCluster = CF_Cluster(tree);
-        }
-    }
-
-
-    subclusters = getAllLeafEntries(tree);
+    auto treeCluster = builder.getTreeCluster();
+    auto subclusters = builder.getAllLeafEntries();
     std::cout << "Total number of leaf entries: " << subclusters.size() << std::endl;
-//    getAllSubclusters(tree, subclusters);
+
     int n = 0;
     for (size_t i = 0; i < subclusters.size(); ++i)
         n += subclusters[i].N;
     std::cout << "Total number of points in leaf entries: " << n << std::endl;
 
-    auto leafNodes = getAllLeafNodes(tree);
+//    auto leafNodes = getAllLeafNodes(tree);
     CF_Vector centroids;
     size_t k = sqrt(subclusters.size());
     for (size_t i = 0; i < k; ++i)
@@ -111,7 +79,6 @@ void example_init(char *filename)
 
             data_t dist = getDistance(subclusters[i], *closest);
             newMSE += dist*dist;
-
 //            std::cout << "Adding " << i << " entry to " << ind << " cluster" << std::endl;
         }
         for (size_t j = 0; j < centroids.size(); ++j)
@@ -122,10 +89,6 @@ void example_init(char *filename)
         std::cout << "New MSE: " << newMSE << std::endl;
     }
     while (newMSE < MSE);
-
-
-//    tree->clear();
-//    delete tree;
 
     std::vector<Color> colors;
     for (int i = 0; i < 8; ++i)

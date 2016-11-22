@@ -4,11 +4,6 @@
 #include "common.h"
 #include "cfcluster.h"
 
-CF_Vector getAllLeafEntries(CF_Node* tree);
-std::vector<CF_Node*> getAllLeafNodes(CF_Node* tree);
-data_t getMaxLeafEntryDiameter(CF_Node *tree);
-data_t getMinNewThreshold(CF_Node *tree);
-
 class CF_Node
 {
 public:
