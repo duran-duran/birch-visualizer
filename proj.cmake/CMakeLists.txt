@@ -14,7 +14,7 @@ add_executable(Visualizer
     ../src/metrics.h ../src/metrics.cpp
     ../src/cftree.h ../src/cftree.cpp
     ../src/cfcluster.h ../src/cfcluster.cpp
-    ../src/minsquare.h ../src/minsquare.cpp
+    ../src/minsquare.h
     ../src/threshold_calculator.h ../src/threshold_calculator.cpp
 )
 target_link_libraries(Visualizer ${OXYGINE_CORE_LIBS})

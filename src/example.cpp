@@ -1,4 +1,4 @@
-#include "oxygine-framework.h"
+﻿#include "oxygine-framework.h"
 #include <functional>
 #include "res/SingleResAnim.h"
 #include "common.h"
@@ -7,64 +7,18 @@
 #include "threshold_calculator.h"
 using namespace oxygine;
 
-//it is our resources
-//in real project you would have more than one Resources declarations.
-//It is important on mobile devices with limited memory and you would load/unload them
 Resources res;
 
 void example_preinit() {}
 
-void getNextThreshold()
-{
-
-}
-
-//CF_Vector getAllSubclusters(CF_Node *tree)
-//{
-//    CF_Node *node = tree;
-//    CF_Vector result;
-//    while (!node->isLeaf())
-//        node = node->getSubclusters().front().child;
-//    result.insert(result.end(), node->getSubclusters().begin(), node->getSubclusters().end());
-//    for (CF_Node *left = node->getPrevLeaf(); left != nullptr; left = left->getPrevLeaf())
-//        result.insert(result.end(), left->getSubclusters().begin(), left->getSubclusters().end());
-//    for (CF_Node *right = node->getNextLeaf(); right != nullptr; right = right->getNextLeaf())
-//        result.insert(result.end(), right->getSubclusters().begin(), right->getSubclusters().end());
-//    return result;
-//}
-
-//void getAllSubclusters(CF_Node *node, CF_Vector &subclusters)
-//{
-//    if (node->isLeaf())
-//        subclusters.insert(subclusters.end(), node->getSubclusters().begin(), node->getSubclusters().end());
-//    else
-//    {
-//        for (auto& cf : node->getSubclusters())
-//            getAllSubclusters(cf.child, subclusters);
-//    }
-//}
-//called from main.cpp
 void example_init(char *filename)
 {
-    //load xml file with resources definition
     res.loadXML("res.xml");
 
     spColorRectSprite canvas = new ColorRectSprite();
     canvas->setColor(Color::White);
     canvas->setSize(640, 640);
     canvas->attachTo(getStage());
-
-    spSprite buttonUp = new Sprite();
-    buttonUp->setResAnim(res.getResAnim("ButtonUp"));
-    buttonUp->setPosition(800, 160);
-    buttonUp->setAnchor(0.5, 0.5);
-    buttonUp->attachTo(getStage());
-
-    spSprite buttonDown = new Sprite();
-    buttonDown->setResAnim(res.getResAnim("ButtonDown"));
-    buttonDown->setPosition(800, 480);
-    buttonDown->setAnchor(0.5, 0.5);
-    buttonDown->attachTo(getStage());
 
     FILE* pfile = fopen(filename, "rb");
     long count;
@@ -193,16 +147,6 @@ void example_init(char *filename)
         }
     }
 
-//    for (auto& cluster : subclusters)
-//    {
-//        spColorRectSprite circle = new ColorRectSprite();
-//        circle->setColor(Color::Yellow);
-//        circle->setAnchor(0.5, 0.5);
-//        circle->setSize(cluster.D, cluster.D);
-//        circle->setPosition(cluster.X0[0], cluster.X0[1]);
-//        circle->attachTo(canvas);
-//    }
-
 //    for (size_t j = 0; j < leafNodes.size(); ++j)
 //    {
 //        for (auto& cluster : leafNodes[j]->getSubclusters())
@@ -224,18 +168,13 @@ void example_init(char *filename)
 //        dot->setPosition(points[i][0], points[i][1]);
 //        dot->attachTo(canvas);
 //    }
-
 }
 
-
-//called each frame from main.cpp
 void example_update()
 {
 }
 
-//called each frame from main.cpp
 void example_destroy()
 {
-    //free previously loaded resources
     res.free();
 }
